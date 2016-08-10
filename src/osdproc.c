@@ -715,23 +715,17 @@ void draw_CWH(void) {
       }
     }
 
-    // shrinking factor for longitude going to poles direction
-    double scaleLongDown = Fast_Cos(fabs(osd_home_lat));
-    double scaleLongUp   = 1.0f / Fast_Cos(fabs(osd_home_lat));
 
-    //DST to Home
-    dstlat = fabs(osd_home_lat - osd_lat) * 111319.5f;
-    dstlon = fabs(osd_home_lon - osd_lon) * 111319.5f * scaleLongDown;
-    dstsqrt = dstlat * dstlat + dstlon * dstlon;
-    osd_home_distance = sqrt(dstsqrt) / 10000000.0f;
-
-    //DIR to Home
-    dstlon = (osd_home_lon - osd_lon);     //OffSet_X
-    dstlat = (osd_home_lat - osd_lat) * scaleLongUp;     //OffSet Y
-    osd_home_bearing = 270 + (atan2(dstlat, -dstlon) * R2D);     //absolut home direction
-    //osd_home_bearing = (osd_home_bearing+360)%360;
-    if (osd_home_bearing > 360)
-      osd_home_bearing -= 360;
+    float rads = fabs(osd_home_lat) * 0.0174532925;
+    double scaleLongDown = cos(rads);
+    double scaleLongUp   = 1.0f/cos(rads);
+    dstlon = (osd_home_lon - osd_lon); //OffSet_X
+    dstlat = (osd_home_lat - osd_lat) * scaleLongUp; //OffSet Y
+    long bearing = 90 + (atan2(dstlat, -dstlon) * 57.295775); //absolut home direction
+    if(bearing < 0) bearing += 360;//normalization
+    bearing = bearing - 180;//absolut return direction
+    if(bearing < 0) bearing += 360;//normalization
+    osd_home_bearing = bearing;
   }
 
   //distance
