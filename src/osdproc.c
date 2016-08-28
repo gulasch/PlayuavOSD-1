@@ -46,11 +46,11 @@ uint8_t last_warn_type = 0;
 int32_t last_warn_time = 0;
 char* warn_str = "";
 
-const char METRIC_SPEED[] = "KM/H";         //kilometer per hour
+const char METRIC_SPEED[] = "";         //kilometer per hour
 const char METRIC_DIST_SHORT[] = "M";       //meter
 const char METRIC_DIST_LONG[] = "KM";       //kilometer
 
-const char IMPERIAL_SPEED[] = "M/H";        //mile per hour
+const char IMPERIAL_SPEED[] = "";        //mile per hour
 const char IMPERIAL_DIST_SHORT[] = "F";     //feet
 const char IMPERIAL_DIST_LONG[] = "M";      //mile
 
@@ -471,7 +471,7 @@ void draw_throttle(void) {
     }
   } else {
     pos_th_y = (int16_t)(0.5 * osd_throttle);
-    sprintf(tmp_str, "THR %d%%", (int32_t)osd_throttle);
+    sprintf(tmp_str, "T %d%%", (int32_t)osd_throttle);
     write_string(tmp_str, posX, posY, 0, 0, TEXT_VA_TOP, TEXT_HA_RIGHT, 0, SIZE_TO_FONT[0]);
   }
 }
@@ -844,9 +844,9 @@ void draw_rssi() {
 
     if (rssi < 0)
       rssi = 0;
-    sprintf(tmp_str, "RSSI %d%%", rssi);
+    sprintf(tmp_str, "R %d%%", rssi);
   } else {
-    sprintf(tmp_str, "RSSI %d", rssi);
+    sprintf(tmp_str, "R %d", rssi);
   }
 
   write_string(tmp_str, eeprom_buffer.params.RSSI_posX,
@@ -894,9 +894,9 @@ void draw_link_quality() {
 
     //Funky Conversion from  pwm min & max to percent
     linkquality = (int) ((float) (linkquality - max) / (float) (max - min) * 100.0f) + 100;
-    sprintf(tmp_str, "LIQU %d%%", linkquality);
+    sprintf(tmp_str, "LQ %d%%", linkquality);
   } else {
-    sprintf(tmp_str, "LIQU %d", linkquality);
+    sprintf(tmp_str, "LQ %d", linkquality);
   }
 
   write_string(tmp_str, eeprom_buffer.params.LinkQuality_posX,
@@ -1663,10 +1663,10 @@ void draw_altitude_scale() {
 
   float alt_shown = osd_rel_alt;
   uint16_t posX = eeprom_buffer.params.Alt_Scale_posX;
-  sprintf(tmp_str, "Alt");
+  sprintf(tmp_str, "agl");
   if (eeprom_buffer.params.Alt_Scale_type == 0) {
     alt_shown = osd_alt;
-    sprintf(tmp_str, "AAlt");
+    sprintf(tmp_str, "AA");
   }
   draw_vertical_scale(alt_shown * convert_distance, 60,
                       eeprom_buffer.params.Alt_Scale_align,
@@ -1736,10 +1736,10 @@ void draw_speed_scale() {
   }
 
   float spd_shown = osd_groundspeed;
-  sprintf(tmp_str, "GS");
+  sprintf(tmp_str, ""); //no text above scale
   if (eeprom_buffer.params.Spd_Scale_type == 1) {
     spd_shown = osd_airspeed;
-    sprintf(tmp_str, "AS");
+    sprintf(tmp_str, "");  //no text above scale
   }
   draw_vertical_scale(spd_shown * convert_speed, 60,
                       eeprom_buffer.params.Speed_scale_align,
