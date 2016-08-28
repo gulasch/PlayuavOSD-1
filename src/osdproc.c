@@ -1663,7 +1663,7 @@ void draw_altitude_scale() {
 
   float alt_shown = osd_rel_alt;
   uint16_t posX = eeprom_buffer.params.Alt_Scale_posX;
-  sprintf(tmp_str, "agl");
+  sprintf(tmp_str, "AGL");
   if (eeprom_buffer.params.Alt_Scale_type == 0) {
     alt_shown = osd_alt;
     sprintf(tmp_str, "AA");
@@ -1717,10 +1717,10 @@ void draw_relative_altitude() {
 
   float tmp = osd_rel_alt * convert_distance;
   if (tmp < convert_distance_divider) {
-    sprintf(tmp_str, "A %d%s", (int) tmp, dist_unit_short);
+    sprintf(tmp_str, "HA %d%s", (int) tmp, dist_unit_short);
   }
   else{
-    sprintf(tmp_str, "A %0.2f%s", (double) (tmp / convert_distance_divider), dist_unit_long);
+    sprintf(tmp_str, "HA %0.2f%s", (double) (tmp / convert_distance_divider), dist_unit_long);
   }
 
   write_string(tmp_str, eeprom_buffer.params.Relative_ALT_posX,
@@ -1765,7 +1765,8 @@ void draw_ground_speed() {
   }
 
   float tmp = osd_groundspeed * convert_speed;
-  sprintf(tmp_str, "GS %d%s", (int) tmp, spd_unit);
+  //sprintf(tmp_str, "GS %d%s", (int) tmp, spd_unit);
+  sprintf(tmp_str, "GS %d", (int) tmp);
   write_string(tmp_str, eeprom_buffer.params.TSPD_posX,
                eeprom_buffer.params.TSPD_posY, 0, 0, TEXT_VA_TOP,
                eeprom_buffer.params.TSPD_align, 0,
@@ -1779,7 +1780,8 @@ void draw_air_speed() {
   }
 
   float tmp = osd_airspeed * convert_speed;
-  sprintf(tmp_str, "AS %d%s", (int) tmp, spd_unit);
+  //sprintf(tmp_str, "AS %d%s", (int) tmp, spd_unit);
+  sprintf(tmp_str, "AS %d", (int) tmp);
   write_string(tmp_str, eeprom_buffer.params.Air_Speed_posX,
                eeprom_buffer.params.Air_Speed_posY, 0, 0, TEXT_VA_TOP,
                eeprom_buffer.params.Air_Speed_align, 0,
