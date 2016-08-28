@@ -46,13 +46,13 @@ uint8_t last_warn_type = 0;
 int32_t last_warn_time = 0;
 char* warn_str = "";
 
-const char METRIC_SPEED[] = "";         //kilometer per hour
-const char METRIC_DIST_SHORT[] = "M";       //meter
-const char METRIC_DIST_LONG[] = "KM";       //kilometer
+const char METRIC_SPEED[] = "kmh";         //kilometer per hour
+const char METRIC_DIST_SHORT[] = "m";       //meter
+const char METRIC_DIST_LONG[] = "km";       //kilometer
 
-const char IMPERIAL_SPEED[] = "";        //mile per hour
-const char IMPERIAL_DIST_SHORT[] = "F";     //feet
-const char IMPERIAL_DIST_LONG[] = "M";      //mile
+const char IMPERIAL_SPEED[] = "mph";        //mile per hour
+const char IMPERIAL_DIST_SHORT[] = "f";     //feet
+const char IMPERIAL_DIST_LONG[] = "m";      //mile
 
 // Unit conversion constants
 float convert_speed = 0.0f;
@@ -447,6 +447,7 @@ void draw_throttle(void) {
 
   pos_th_y = (int16_t)(0.5 * osd_throttle);
   pos_th_x = posX - 25 + pos_th_y;
+  //Text: Throttle Scale
   sprintf(tmp_str, "%d%%", (int32_t)osd_throttle);
   write_string(tmp_str, posX, posY, 0, 0, TEXT_VA_TOP, TEXT_HA_RIGHT, 0, SIZE_TO_FONT[0]);
 
@@ -471,7 +472,8 @@ void draw_throttle(void) {
     }
   } else {
     pos_th_y = (int16_t)(0.5 * osd_throttle);
-    sprintf(tmp_str, "T %d%%", (int32_t)osd_throttle);
+    //Text: Throttle Text
+	sprintf(tmp_str, "T %d%%", (int32_t)osd_throttle);
     write_string(tmp_str, posX, posY, 0, 0, TEXT_VA_TOP, TEXT_HA_RIGHT, 0, SIZE_TO_FONT[0]);
   }
 }
@@ -482,6 +484,7 @@ void draw_home_latitude() {
     return;
   }
 
+  //Text: Home Lat
   sprintf(tmp_str, "H %0.5f", (double) osd_home_lat / 10000000.0f);
   write_string(tmp_str, eeprom_buffer.params.HomeLatitude_posX,
                eeprom_buffer.params.HomeLatitude_posY, 0, 0, TEXT_VA_TOP,
@@ -495,6 +498,7 @@ void draw_home_longitude() {
     return;
   }
 
+  //Text: Home Lat
   sprintf(tmp_str, "H %0.5f", (double) osd_home_lon / 10000000.0f);
   write_string(tmp_str, eeprom_buffer.params.HomeLongitude_posX,
                eeprom_buffer.params.HomeLongitude_posY, 0, 0, TEXT_VA_TOP,
@@ -508,6 +512,7 @@ void draw_gps_status() {
     return;
   }
 
+  //Text: GPS Status 
   switch (osd_fix_type) {
   case NO_GPS:
   case NO_FIX:
@@ -538,6 +543,7 @@ void draw_gps_hdop() {
     return;
   }
 
+  //Text: GPS HDOP
   sprintf(tmp_str, "HDOP %0.1f", (double) osd_hdop / 100.0f);
   write_string(tmp_str, eeprom_buffer.params.GpsHDOP_posX,
                eeprom_buffer.params.GpsHDOP_posY, 0, 0, TEXT_VA_TOP,
@@ -551,6 +557,7 @@ void draw_gps_latitude() {
     return;
   }
 
+  //Text: GPS Lat
   sprintf(tmp_str, "%0.5f", (double) osd_lat / 10000000.0f);
   write_string(tmp_str, eeprom_buffer.params.GpsLat_posX,
                eeprom_buffer.params.GpsLat_posY, 0, 0, TEXT_VA_TOP,
@@ -564,6 +571,7 @@ void draw_gps_longitude() {
     return;
   }
 
+  //Text: GPS Long
   sprintf(tmp_str, "%0.5f", (double) osd_lon / 10000000.0f);
   write_string(tmp_str, eeprom_buffer.params.GpsLon_posX,
                eeprom_buffer.params.GpsLon_posY, 0, 0, TEXT_VA_TOP,
@@ -640,6 +648,7 @@ void draw_gps2_longitude() {
                SIZE_TO_FONT[eeprom_buffer.params.Gps2Lon_fontsize]);
 }
 
+//Text: Total Trip
 void draw_total_trip() {
   if (!enabledAndShownOnPanel(eeprom_buffer.params.TotalTripDist_en,
                               eeprom_buffer.params.TotalTripDist_panel)) {
@@ -648,7 +657,8 @@ void draw_total_trip() {
 
   float tmp = osd_total_trip_dist * convert_distance;
   if (tmp < convert_distance_divider) {
-    sprintf(tmp_str, "%d%s", (int) tmp, dist_unit_short);
+    //sprintf(tmp_str, "%d%s", (int) tmp, dist_unit_short);
+	sprintf(tmp_str, "%d", (int) tmp);
   }
   else{
     sprintf(tmp_str, "%0.2f%s", (double) (tmp / convert_distance_divider), dist_unit_long);
@@ -659,6 +669,7 @@ void draw_total_trip() {
                SIZE_TO_FONT[eeprom_buffer.params.TotalTripDist_fontsize]);
 }
 
+//Text: Time
 void draw_time() {
   if (!enabledAndShownOnPanel(eeprom_buffer.params.Time_en,
                               eeprom_buffer.params.Time_panel)) {
@@ -738,7 +749,8 @@ void draw_CWH(void) {
   if (eeprom_buffer.params.CWH_home_dist_en == 1 && shownAtPanel(eeprom_buffer.params.CWH_home_dist_panel)) {
     float tmp = osd_home_distance * convert_distance;
     if (tmp < convert_distance_divider)
-      sprintf(tmp_str, "H %d%s", (int)tmp, dist_unit_short);
+      //sprintf(tmp_str, "H %d%s", (int)tmp, dist_unit_short);
+      sprintf(tmp_str, "H %d", (int)tmp);
     else
       sprintf(tmp_str, "H %0.2f%s", (double)(tmp / convert_distance_divider), dist_unit_long);
 
@@ -747,7 +759,8 @@ void draw_CWH(void) {
   if ((wp_number != 0) && (eeprom_buffer.params.CWH_wp_dist_en) && shownAtPanel(eeprom_buffer.params.CWH_wp_dist_panel)) {
     float tmp = wp_dist * convert_distance;
     if (tmp < convert_distance_divider)
-      sprintf(tmp_str, "WP %d%s", (int)tmp, dist_unit_short);
+      //sprintf(tmp_str, "WP %d%s", (int)tmp, dist_unit_short);
+      sprintf(tmp_str, "WP %d", (int)tmp);
     else
       sprintf(tmp_str, "WP %0.2f%s", (double)(tmp / convert_distance_divider), dist_unit_long);
 
@@ -765,6 +778,7 @@ void draw_CWH(void) {
   }
 }
 
+//Climb Rate
 void draw_climb_rate() {
   if (!enabledAndShownOnPanel(eeprom_buffer.params.ClimbRate_en,
                               eeprom_buffer.params.ClimbRate_panel)) {
@@ -844,7 +858,8 @@ void draw_rssi() {
 
     if (rssi < 0)
       rssi = 0;
-    sprintf(tmp_str, "R %d%%", rssi);
+    //Text: RSSI 
+	sprintf(tmp_str, "R %d%%", rssi);
   } else {
     sprintf(tmp_str, "R %d", rssi);
   }
@@ -894,7 +909,8 @@ void draw_link_quality() {
 
     //Funky Conversion from  pwm min & max to percent
     linkquality = (int) ((float) (linkquality - max) / (float) (max - min) * 100.0f) + 100;
-    sprintf(tmp_str, "LQ %d%%", linkquality);
+    //Text: Link Quality
+	sprintf(tmp_str, "LQ %d%%", linkquality);
   } else {
     sprintf(tmp_str, "LQ %d", linkquality);
   }
@@ -917,6 +933,7 @@ void draw_efficiency() {
   if (speed != 0) {
     efficiency = wattage / speed;
   }
+  //Text: Efficiency
   sprintf(tmp_str, "%0.1fW/%s", efficiency, dist_unit_long);
 
   write_string(tmp_str, eeprom_buffer.params.Efficiency_posX, eeprom_buffer.params.Efficiency_posY,
@@ -931,7 +948,8 @@ void draw_panel_changed() {
   }
 
   if ((GetSystimeMS() - new_panel_start_time) < 3000) {
-    sprintf(tmp_str, "P %d", (int) current_panel);
+    //Text: Panel Change
+	sprintf(tmp_str, "P %d", (int) current_panel);
     write_string(tmp_str, GRAPHICS_X_MIDDLE, 210, 0, 0, TEXT_VA_TOP,
                  TEXT_HA_CENTER, 0, SIZE_TO_FONT[1]);
   }
@@ -1319,7 +1337,8 @@ void draw_wind(void) {
 
   //draw wind speed
   float tmp = osd_windSpeed * convert_speed;
-  sprintf(tmp_str, "%.2f%s", tmp, spd_unit);
+  //sprintf(tmp_str, "%.2f%s", tmp, spd_unit);
+  sprintf(tmp_str, "%.2f", tmp);
   write_string(tmp_str, posX + 15, posY, 0, 0, TEXT_VA_MIDDLE, TEXT_HA_LEFT, 0, SIZE_TO_FONT[0]);
 }
 
@@ -1596,6 +1615,7 @@ void draw_arm_state() {
     return;
   }
 
+  //Text: Arm State
   tmp_str1 = motor_armed ? "ARMED" : "DISARMED";
   write_string(tmp_str1, eeprom_buffer.params.Arm_posX,
                eeprom_buffer.params.Arm_posY, 0, 0, TEXT_VA_TOP,
@@ -1609,6 +1629,7 @@ void draw_battery_voltage() {
     return;
   }
 
+  //Text: Battery Voltage
   sprintf(tmp_str, "%0.1fV", (double) osd_vbat_A);
   write_string(tmp_str, eeprom_buffer.params.BattVolt_posX,
                eeprom_buffer.params.BattVolt_posY, 0, 0, TEXT_VA_TOP,
@@ -1621,7 +1642,8 @@ void draw_battery_current() {
                               eeprom_buffer.params.BattCurrent_panel)) {
     return;
   }
-
+  
+  //Text: Battery Current
   sprintf(tmp_str, "%0.1fA", (double) (osd_curr_A * 0.01));
   write_string(tmp_str, eeprom_buffer.params.BattCurrent_posX,
                eeprom_buffer.params.BattCurrent_posY, 0, 0, TEXT_VA_TOP,
@@ -1635,7 +1657,8 @@ void draw_battery_remaining() {
     return;
   }
 
-  sprintf(tmp_str, "%d%%", osd_battery_remaining_A);
+  //Text: Battery Remaining
+  sprintf(tmp_str, "Bat %d%%", osd_battery_remaining_A);
   write_string(tmp_str, eeprom_buffer.params.BattRemaining_posX,
                eeprom_buffer.params.BattRemaining_posY, 0, 0, TEXT_VA_TOP,
                eeprom_buffer.params.BattRemaining_align, 0,
@@ -1648,6 +1671,7 @@ void draw_battery_consumed() {
     return;
   }
 
+  //Text: Battery Consumed
   sprintf(tmp_str, "%dmah", (int)osd_curr_consumed_mah);
   write_string(tmp_str, eeprom_buffer.params.BattConsumed_posX,
                eeprom_buffer.params.BattConsumed_posY, 0, 0, TEXT_VA_TOP,
@@ -1663,9 +1687,11 @@ void draw_altitude_scale() {
 
   float alt_shown = osd_rel_alt;
   uint16_t posX = eeprom_buffer.params.Alt_Scale_posX;
-  sprintf(tmp_str, "AGL");
+  //Text: altitude scale description home
+  sprintf(tmp_str, "HA");
   if (eeprom_buffer.params.Alt_Scale_type == 0) {
     alt_shown = osd_alt;
+	//Text: altitude scale description absolute
     sprintf(tmp_str, "AA");
   }
   draw_vertical_scale(alt_shown * convert_distance, 60,
@@ -1683,10 +1709,11 @@ void draw_altitude_scale() {
   if ((eeprom_buffer.params.Alt_Scale_align == 1) && (posX > 15)) {
     posX += 10;
   }
-  write_string("M", posX,
-               eeprom_buffer.params.Alt_Scale_posY + 40, 0, 0, TEXT_VA_TOP,
-               eeprom_buffer.params.Alt_Scale_align, 0,
-               SIZE_TO_FONT[0]);
+  //Text: altitude scale unit
+  //write_string("M", posX,
+  //             eeprom_buffer.params.Alt_Scale_posY + 40, 0, 0, TEXT_VA_TOP,
+  //             eeprom_buffer.params.Alt_Scale_align, 0,
+  //             SIZE_TO_FONT[0]);
 }
 
 void draw_absolute_altitude() {
@@ -1697,7 +1724,9 @@ void draw_absolute_altitude() {
 
   float tmp = osd_alt * convert_distance;
   if (tmp < convert_distance_divider) {
-    sprintf(tmp_str, "AA %d%s", (int) tmp, dist_unit_short);
+    //Text: absolute altitude short unit
+	//sprintf(tmp_str, "AA %d%s", (int) tmp, dist_unit_short);
+	sprintf(tmp_str, "AA %d", (int) tmp);
   }
   else{
     sprintf(tmp_str, "AA %0.2f%s", (double) (tmp / convert_distance_divider), dist_unit_long);
@@ -1717,7 +1746,9 @@ void draw_relative_altitude() {
 
   float tmp = osd_rel_alt * convert_distance;
   if (tmp < convert_distance_divider) {
-    sprintf(tmp_str, "HA %d%s", (int) tmp, dist_unit_short);
+    //Text: home altitude short unit
+	//sprintf(tmp_str, "HA %d%s", (int) tmp, dist_unit_short);
+	sprintf(tmp_str, "HA %d", (int) tmp);
   }
   else{
     sprintf(tmp_str, "HA %0.2f%s", (double) (tmp / convert_distance_divider), dist_unit_long);
@@ -1736,10 +1767,11 @@ void draw_speed_scale() {
   }
 
   float spd_shown = osd_groundspeed;
-  sprintf(tmp_str, ""); //no text above scale
+  //Text: speed scale sescription GS & AS
+  sprintf(tmp_str, ""); 
   if (eeprom_buffer.params.Spd_Scale_type == 1) {
     spd_shown = osd_airspeed;
-    sprintf(tmp_str, "");  //no text above scale
+    sprintf(tmp_str, "");
   }
   draw_vertical_scale(spd_shown * convert_speed, 60,
                       eeprom_buffer.params.Speed_scale_align,
@@ -1751,11 +1783,12 @@ void draw_speed_scale() {
                eeprom_buffer.params.Speed_scale_align, 0,
                SIZE_TO_FONT[0]);
 
-  sprintf(tmp_str, "%s", spd_unit);
-  write_string(tmp_str, eeprom_buffer.params.Speed_scale_posX,
-               eeprom_buffer.params.Speed_scale_posY + 40, 0, 0, TEXT_VA_TOP,
-               eeprom_buffer.params.Speed_scale_align, 0,
-               SIZE_TO_FONT[0]);
+  //Text: speed scale unit			  
+  //sprintf(tmp_str, "%s", spd_unit);
+  //write_string(tmp_str, eeprom_buffer.params.Speed_scale_posX,
+  //             eeprom_buffer.params.Speed_scale_posY + 40, 0, 0, TEXT_VA_TOP,
+  //             eeprom_buffer.params.Speed_scale_align, 0,
+  //             SIZE_TO_FONT[0]);
 }
 
 void draw_ground_speed() {
@@ -1765,6 +1798,7 @@ void draw_ground_speed() {
   }
 
   float tmp = osd_groundspeed * convert_speed;
+  //Text: groundspeed text and unit
   //sprintf(tmp_str, "GS %d%s", (int) tmp, spd_unit);
   sprintf(tmp_str, "GS %d", (int) tmp);
   write_string(tmp_str, eeprom_buffer.params.TSPD_posX,
@@ -1780,6 +1814,7 @@ void draw_air_speed() {
   }
 
   float tmp = osd_airspeed * convert_speed;
+  //Text: airspeed text and unit
   //sprintf(tmp_str, "AS %d%s", (int) tmp, spd_unit);
   sprintf(tmp_str, "AS %d", (int) tmp);
   write_string(tmp_str, eeprom_buffer.params.Air_Speed_posX,
